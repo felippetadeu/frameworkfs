@@ -36,7 +36,8 @@ O projeto também possui as seguintes interfaces:
 Ao ser realizada uma requisição para um Controller que herde de AbstractCRUDController ou [AbstractController](Controller/AbstractController.cs), que o primeiro herda do segundo, no método construtor do segundo é instanciado um objeto de conexão com o banco, sendo definido o objeto no arquivo Web.config da API.
 
 Trechos usados:
-    <add key="ConnectionString" value="Server=localhost;Database=webapi;UID=root;Password=" />
+
+	<add key="ConnectionString" value="Server=localhost;Database=webapi;UID=root;Password=" />
     <add key="ConnectionType" value="0" />
     <add key="AuthorizedUrls" value="http://localhost" />
     
