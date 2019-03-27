@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Framework.Email
 {
@@ -18,7 +13,7 @@ namespace Framework.Email
             /// <summary>
             /// Email que será responsável por enviar
             /// </summary>
-            public string De { get; set; } = "rsantosdesenv@gmail.com";
+            public string De { get; set; } = "";
 
             /// <summary>
             /// Email ou emails (separados por ';') que receberão o e-mail
@@ -38,7 +33,7 @@ namespace Framework.Email
             /// <summary>
             /// Host que será enviado o e-mail
             /// </summary>
-            public string Host { get; set; } = "mx1537.wpservers.com.br";
+            public string Host { get; set; } = "";
 
             /// <summary>
             /// Assunto do e-mail
@@ -61,18 +56,23 @@ namespace Framework.Email
             public bool CorpoHtml { get; set; } = false;
 
             /// <summary>
+            /// Nome que será exibido o e-mail
+            /// </summary>
+            public string NomeExibicao { get; set; } = "";
+
+            /// <summary>
             /// Construtor
             /// </summary>
-            /// <param name="de">Email que será responsável por enviar, caso não seja preenchido será associado o email: rsantosdesenv@gmail.com</param>
+            /// <param name="de">Email que será responsável por enviar, caso não seja preenchido será associado o email</param>
             /// <param name="para">Email ou emails (separados por ';') que receberão o e-mail</param>
             /// <param name="porta">Porta para envio do e-mail, caso não seja preenchida será utilizada a 587</param>
             /// <param name="metodoEntrega">Método de entrega do e-mail, caso não seja preenchido será utilizado o: SmtpDeliveryMethod.Network</param>
-            /// <param name="host">Host que será enviado o e-mail, caso não seja preenchido será utilizado o: mx1537.wpservers.com.br</param>
+            /// <param name="host">Host que será enviado o e-mail, caso não seja preenchido será utilizado o</param>
             /// <param name="assunto">Assunto do e-mail</param>
             /// <param name="corpo">Corpo do e-mail</param>
-            /// <param name="credenciaisEnvio">Credenciais para o envio do e-mail, caso não seja passada será utilizada as credenciais do rsantosdesenv@gmail.com</param>
+            /// <param name="credenciaisEnvio">Credenciais para o envio do e-mail, caso não seja passada será utilizada as credenciais do email</param>
             /// <param name="corpoHTML">Corpo do e-mail é HTML</param>
-            public ConfiguracoesEmail(string para, string assunto, string corpo, string de = "rsantosdesenv@gmail.com", NetworkCredential credenciaisEnvio = null, int porta = 587, SmtpDeliveryMethod metodoEntrega = SmtpDeliveryMethod.Network, string host = "mx1537.wpservers.com.br", bool corpoHtml = false)
+            public ConfiguracoesEmail(string para, string assunto, string corpo, string de = "", NetworkCredential credenciaisEnvio = null, int porta = 587, SmtpDeliveryMethod metodoEntrega = SmtpDeliveryMethod.Network, string host = "", bool corpoHtml = false, string nomeExibicao = "")
             {
                 De = de;
                 Para = para;
@@ -82,10 +82,11 @@ namespace Framework.Email
                 Assunto = assunto;
                 CorpoHtml = corpoHtml;
                 Corpo = corpo;
+                NomeExibicao = nomeExibicao;
                 CredenciaisEnvio = credenciaisEnvio;
                 if (CredenciaisEnvio == null)
                 {
-                    CredenciaisEnvio = new NetworkCredential("rsantosdesenv@gmail.com", "M4952859");
+                    CredenciaisEnvio = new NetworkCredential("email", "senha");
                 }
             }
         }
@@ -95,7 +96,7 @@ namespace Framework.Email
             public static void EnviarEmail(ConfiguracoesEmail configuracao)
             {
                 MailMessage mail = new MailMessage();
-                mail.From = new MailAddress(configuracao.De, "RsWebDev");
+                mail.From = new MailAddress(configuracao.De, string.IsNullOrEmpty(configuracao.NomeExibicao) ? configuracao.De : configuracao.NomeExibicao);
                 foreach (var item in configuracao.Para.Split(';'))
                 {
                     mail.To.Add(new MailAddress(item));
